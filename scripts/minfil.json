@@ -1,0 +1,47 @@
+[
+  {
+    "name": "Custom Camaro",
+    "year": 1968,
+    "series": "Original 16",
+    "collector_number": "01/16",
+    "is_treasure_hunt": false,
+    "is_super_treasure": false,
+    "image_url": "https://example.com/images/custom_camaro.jpg"
+  },
+  {
+    "name": "Twin Mill",
+    "year": 1969,
+    "series": "Collector Favorites",
+    "collector_number": "02/16",
+    "is_treasure_hunt": false,
+    "is_super_treasure": false,
+    "image_url": "https://example.com/images/twin_mill.jpg"
+  },
+  {
+    "name": "Bone Shaker",
+    "year": 2006,
+    "series": "Hot Wheels Originals",
+    "collector_number": "120/200",
+    "is_treasure_hunt": true,
+    "is_super_treasure": false,
+    "image_url": "https://example.com/images/bone_shaker.jpg"
+  },
+  {
+    "name": "’67 Mustang Coupe",
+    "year": 2021,
+    "series": "Muscle Mania",
+    "collector_number": "045/250",
+    "is_treasure_hunt": false,
+    "is_super_treasure": true,
+    "image_url": "https://example.com/images/67_mustang_coupe.jpg"
+  },
+  {
+    "name": "Liberty Walk Nissan GT-R",
+    "year": 2023,
+    "series": "HW J-Imports",
+    "collector_number": "138/250",
+    "is_treasure_hunt": false,
+    "is_super_treasure": false,
+    "image_url": "https://example.com/images/lbwk_gtr.jpg"
+  }
+]
