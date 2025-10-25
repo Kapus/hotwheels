@@ -39,8 +39,21 @@ $criteria = [
     'sort' => $_GET['sort'] ?? '',
 ];
 
-$cars = search_cars($criteria);
-$resultCount = count($cars);
+$hasActiveFilters = ($criteria['q'] !== ''
+    || $criteria['year'] !== ''
+    || $criteria['series'] !== ''
+    || $criteria['treasure'] !== '');
+
+$cars = [];
+$resultCount = 0;
+$limitReached = false;
+
+if ($hasActiveFilters) {
+    $cars = search_cars($criteria);
+    $resultCount = count($cars);
+    $limitReached = $resultCount >= SEARCH_RESULT_LIMIT;
+}
+
 $hasSort = !empty($criteria['sort']) && $criteria['sort'] !== 'year_desc';
 $filters = get_car_filters();
 $userCars = get_user_car_map($userId);
@@ -107,14 +120,28 @@ $conditionOptions = [
 </form>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h6 class="mb-0 text-muted">Visar <?php echo $resultCount; ?> bilar</h6>
-    <?php if (!empty($criteria['q']) || !empty($criteria['year']) || !empty($criteria['series']) || !empty($criteria['treasure']) || $hasSort): ?>
+    <h6 class="mb-0 text-muted">
+        <?php if ($hasActiveFilters): ?>
+            Visar <?php echo $resultCount; ?> bilar
+        <?php else: ?>
+            Börja med att söka eller filtrera
+        <?php endif; ?>
+    </h6>
+    <?php if ($hasActiveFilters || $hasSort): ?>
         <small class="text-muted">Aktiva filter används</small>
     <?php endif; ?>
 </div>
 
+<?php if (!$hasActiveFilters): ?>
+    <div class="alert alert-info">Katalogen är stor. Skriv i sökrutan eller välj filter för att visa matchande bilar.</div>
+<?php endif; ?>
+
+<?php if ($limitReached): ?>
+    <div class="alert alert-warning">Visar högst <?php echo SEARCH_RESULT_LIMIT; ?> träffar. Förfina din sökning för att se fler resultat.</div>
+<?php endif; ?>
+
 <div class="row g-3">
-    <?php if (empty($cars)): ?>
+    <?php if ($hasActiveFilters && empty($cars)): ?>
         <div class="col-12">
             <div class="alert alert-info">Inga bilar matchar dina filter just nu.</div>
         </div>

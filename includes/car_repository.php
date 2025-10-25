@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/db.php';
 
+const SEARCH_RESULT_LIMIT = 200;
+
 function get_car_filters(): array
 {
     $pdo = get_db_connection();
@@ -9,7 +11,7 @@ function get_car_filters(): array
     return ['years' => $years, 'series' => $series];
 }
 
-function search_cars(array $criteria): array
+function search_cars(array $criteria, int $limit = SEARCH_RESULT_LIMIT): array
 {
     $pdo = get_db_connection();
     $sql = 'SELECT * FROM cars WHERE 1=1';
@@ -59,8 +61,21 @@ function search_cars(array $criteria): array
             $sql .= ' ORDER BY year DESC, name ASC';
     }
 
+    if ($limit > 0) {
+        $sql .= ' LIMIT :limit';
+    }
+
     $stmt = $pdo->prepare($sql);
-    $stmt->execute($params);
+    foreach ($params as $param => $value) {
+        $type = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+        $stmt->bindValue(':' . $param, $value, $type);
+    }
+
+    if ($limit > 0) {
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    }
+
+    $stmt->execute();
     return $stmt->fetchAll();
 }
 
